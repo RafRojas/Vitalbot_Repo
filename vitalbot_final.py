@@ -4,7 +4,7 @@ import uuid
 import openai
 from datetime import datetime, timedelta
 
-OPENAI_API_KEY= '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'
+OPENAI_API_KEY= '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'
 
 # Check if it's Linux so it works on Streamlit Cloud
 if os.name == 'posix':
@@ -231,15 +231,15 @@ if not any(msg.get("content", "").startswith("Today's date is") for msg in st.se
 
 # --- Sidebar Setup ---
 with st.sidebar:
-    #st.divider()
+    # Model selection
     models = [model for model in MODELS]
-
     st.selectbox(
         "🤖 Select a Model", 
         options=models,
         key="model",
     )
 
+    # Columns for RAG toggle and Clear Chat button
     cols0 = st.columns(2)
     with cols0[0]:
         is_vector_db_loaded = ("vector_db" in st.session_state and st.session_state.vector_db is not None)
@@ -253,16 +253,25 @@ with st.sidebar:
     with cols0[1]:
         st.button("Clear Chat", on_click=lambda: st.session_state.messages.clear(), type="primary")
 
-    temperature = st.sidebar.slider(
-    "Temperature", min_value=0.0, max_value=1.0, value=0.5, step=0.1
+    # Temperature Slider
+    temperature = st.slider(
+        "Temperature", min_value=0.0, max_value=1.0, value=0.5, step=0.1
     )
 
-    max_tokens = st.sidebar.number_input(
-    "Max Tokens", min_value=1, max_value=4096, value=200, step=1
+    # Max Tokens Number Input
+    max_tokens = st.number_input(
+        "Max Tokens", min_value=1, max_value=4096, value=200, step=1
     )
 
+    # Past Messages Slider
+    past_messages = st.slider(
+        "Number of Past Messages", min_value=0, max_value=50, value=30, step=1
+    )
+
+    # RAG Sources Header
     st.header("RAG Sources:")
-    
+
+    # File Uploader for RAG Documents
     st.file_uploader(
         "📄 Upload a document", 
         type=["pdf", "txt", "docx", "md"],
@@ -271,6 +280,7 @@ with st.sidebar:
         key="rag_docs",
     )
 
+    # URL Input for RAG Sources
     st.text_input(
         "🌐 Introduce a URL", 
         placeholder="https://example.com",
@@ -278,8 +288,10 @@ with st.sidebar:
         key="rag_url",
     )
 
+    # Expandable Section to Show RAG Documents
     with st.expander(f"📚 Documents in DB ({0 if not is_vector_db_loaded else len(st.session_state.rag_sources)})"):
         st.write([] if not is_vector_db_loaded else [source for source in st.session_state.rag_sources])
+
 
 # --- Main Chat Application ---
 model_provider = st.session_state.model.split("/")[0]
