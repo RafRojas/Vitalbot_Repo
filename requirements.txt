@@ -4,4 +4,4 @@ python-dotenv
 pysqlite3-binary
 langchain
 langchain_community
-
+pypdf
