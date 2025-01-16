@@ -4,7 +4,7 @@ import uuid
 import openai
 from datetime import datetime, timedelta
 
-OPENAI_API_KEY= "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"
+OPENAI_API_KEY= "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"
 
 # Check if it's Linux so it works on Streamlit Cloud
 if os.name == 'posix':
