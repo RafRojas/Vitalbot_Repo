@@ -4,6 +4,8 @@ import uuid
 import openai
 from datetime import datetime, timedelta
 
+OPENAI_API_KEY= "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"
+
 # Check if it's Linux so it works on Streamlit Cloud
 if os.name == 'posix':
     __import__('pysqlite3')
